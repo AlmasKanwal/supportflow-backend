@@ -1,0 +1,90 @@
+[
+  {
+    "name": "Manahil",
+    "email": "manahil@supportflow.com",
+    "password": "worker123",
+    "role": "worker",
+    "categories": ["Teaching"],
+    "rating": 4.9,
+    "totalReviews": 42,
+    "completedTasks": 42,
+    "isActive": true
+  },
+  {
+    "name": "Hooria",
+    "email": "hooria@supportflow.com",
+    "password": "worker123",
+    "role": "worker",
+    "categories": ["Teaching", "Design"],
+    "rating": 4.7,
+    "totalReviews": 35,
+    "completedTasks": 35,
+    "isActive": true
+  },
+  {
+    "name": "Tayyaba",
+    "email": "tayyaba@supportflow.com",
+    "password": "worker123",
+    "role": "worker",
+    "categories": ["Teaching"],
+    "rating": 4.6,
+    "totalReviews": 28,
+    "completedTasks": 28,
+    "isActive": true
+  },
+  {
+    "name": "Bilal Ahmed",
+    "email": "bilal@supportflow.com",
+    "password": "worker123",
+    "role": "worker",
+    "categories": ["Technology"],
+    "rating": 4.8,
+    "totalReviews": 51,
+    "completedTasks": 51,
+    "isActive": true
+  },
+  {
+    "name": "Sara Khan",
+    "email": "sara@supportflow.com",
+    "password": "worker123",
+    "role": "worker",
+    "categories": ["Technology", "Design"],
+    "rating": 4.5,
+    "totalReviews": 19,
+    "completedTasks": 19,
+    "isActive": true
+  },
+  {
+    "name": "Usman Tariq",
+    "email": "usman@supportflow.com",
+    "password": "worker123",
+    "role": "worker",
+    "categories": ["Repair"],
+    "rating": 4.4,
+    "totalReviews": 23,
+    "completedTasks": 23,
+    "isActive": true
+  },
+  {
+    "name": "Ayesha Malik",
+    "email": "ayesha@supportflow.com",
+    "password": "worker123",
+    "role": "worker",
+    "categories": ["Cleaning"],
+    "rating": 4.6,
+    "totalReviews": 30,
+    "completedTasks": 30,
+    "isActive": true
+  },
+  {
+    "name": "Zainab Riaz",
+    "email": "zainab@supportflow.com",
+    "password": "worker123",
+    "role": "worker",
+    "categories": ["Design"],
+    "rating": 4.3,
+    "totalReviews": 15,
+    "completedTasks": 15,
+    "isActive": true
+  }
+]

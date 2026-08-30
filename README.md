@@ -1,227 +1,267 @@
 # SupportFlow - Backend
 
-This is the backend REST API for **SupportFlow**, a service booking / support request system where customers raise service requests, workers accept and complete them, and admins oversee the whole platform.
+SupportFlow is a service booking and support request system where customers can raise service requests, workers can manage and complete them, and admins can oversee the platform.
 
-## 1. Project Overview
+## Demo Accounts
 
-SupportFlow connects three types of users:
+### Admin
 
-- **Customer** – raises a service request ("Raise an Issue"), picks a category and a worker, tracks status, chats with the worker, and leaves a review once the work is done.
-- **Worker** – sees requests assigned to them, accepts or rejects them, updates priority/status, and adds a resolution note before marking a request as completed.
-- **Admin** – views all customers, workers, and requests, and can drill into a specific worker's task history.
+| Role  | Email                                                 | Password |
+| ----- | ----------------------------------------------------- | -------- |
+| Admin | [admin@supportflow.com](mailto:admin@supportflow.com) | admin123 |
 
-The backend is a plain Express + MongoDB REST API. There are no sockets, no polling, and no external AI service — the "smart category suggestion" is a simple keyword-matching function (see `utils/categorySuggestion.js`).
+### Workers
 
-## 2. Technologies
+| Role   | Email                                                     | Password  |
+| ------ | --------------------------------------------------------- | --------- |
+| Worker | [manahil@supportflow.com](mailto:manahil@supportflow.com) | worker123 |
+| Worker | [hooria@supportflow.com](mailto:hooria@supportflow.com)   | worker123 |
+| Worker | [tayyaba@supportflow.com](mailto:tayyaba@supportflow.com) | worker123 |
+| Worker | [bilal@supportflow.com](mailto:bilal@supportflow.com)     | worker123 |
+| Worker | [sara@supportflow.com](mailto:sara@supportflow.com)       | worker123 |
+| Worker | [usman@supportflow.com](mailto:usman@supportflow.com)     | worker123 |
+| Worker | [ayesha@supportflow.com](mailto:ayesha@supportflow.com)   | worker123 |
+| Worker | [zainab@supportflow.com](mailto:zainab@supportflow.com)   | worker123 |
 
-- Node.js + Express.js
-- MongoDB + Mongoose
-- JWT (jsonwebtoken) for authentication
-- bcryptjs for password hashing
-- dotenv, cors
+Customers can create their own account using the **Register** option.
 
-## 3. Folder Structure
+---
 
+# Features & How to Use Them
+
+## 1. Customer Features
+
+### Register / Login
+
+Customers can create an account and log in to the system.
+
+**How to use:**
+
+1. Open the application.
+2. Go to **Register**.
+3. Enter your name, email, and password.
+4. Login using your account.
+
+### Raise an Issue
+
+Customers can create a service request.
+
+**How to use:**
+
+1. Login as a customer.
+2. Open **Raise an Issue**.
+3. Enter the issue description.
+4. Select a category.
+5. Select a worker.
+6. Submit the request.
+
+The system creates a ticket for the request.
+
+### View My Requests
+
+Customers can see all the service requests they have created.
+
+They can check:
+
+* Ticket number
+* Category
+* Assigned worker
+* Priority
+* Current status
+* Request details
+
+### Track Request Status
+
+Customers can track their request as it moves through the process.
+
+The normal flow is:
+
+**Pending → In Progress → Completed**
+
+A request can also be rejected or cancelled.
+
+### Chat with Worker
+
+Customers can send messages to the assigned worker from the ticket.
+
+**How to use:**
+
+1. Open a ticket.
+2. Go to the messages/chat section.
+3. Type a message.
+4. Send it.
+
+### Cancel Request
+
+Customers can cancel a request while it is still pending or in progress.
+
+### Leave a Review
+
+After a request is completed, the customer can leave a review for the worker.
+
+---
+
+# 2. Worker Features
+
+Workers can manage service requests assigned to them.
+
+### View Assigned Requests
+
+Workers can see the requests assigned to their account.
+
+They can view:
+
+* Customer information
+* Issue description
+* Category
+* Priority
+* Status
+* Ticket number
+
+### Accept Request
+
+A worker can accept a pending request.
+
+**How to use:**
+
+1. Login using a worker account.
+2. Open the assigned request.
+3. Click **Accept**.
+
+The request moves from **Pending** to **In Progress**.
+
+### Reject Request
+
+A worker can reject a pending request if they cannot handle it.
+
+### Update Priority
+
+Workers can update the priority of a request.
+
+### Update Status
+
+Workers can update the request status while working on it.
+
+Available flow:
+
+**Pending → In Progress → Completed**
+
+Before marking a request as **Completed**, the worker must add a resolution note explaining how the issue was resolved.
+
+### Chat with Customer
+
+Workers can communicate with customers through the ticket messages.
+
+### Complete Request
+
+After solving the issue:
+
+1. Open the assigned ticket.
+2. Add a **Resolution Note**.
+3. Update the status to **Completed**.
+
+Once completed, the ticket is final and cannot be changed.
+
+---
+
+# 3. Admin Features
+
+Admins can manage and monitor the complete SupportFlow system.
+
+### Admin Dashboard
+
+The admin can view an overview of the platform, including customers, workers, and service requests.
+
+### View Customers
+
+Admins can view the registered customers.
+
+### View Workers
+
+Admins can view all workers and their information.
+
+### Worker Task History
+
+Admins can open a specific worker and view their previous and current tasks.
+
+### View All Tickets
+
+Admins can view all service requests created in the system and monitor their progress.
+
+---
+
+# 4. Worker Listing
+
+Customers can browse available workers.
+
+Workers can be viewed by category, such as:
+
+* Teaching
+* Technology
+* Design
+* Repair
+* Cleaning
+
+Customers can also view reviews for workers before selecting them.
+
+---
+
+# 5. Category Suggestion
+
+When a customer enters an issue description, the system can suggest a suitable category based on keywords.
+
+For example:
+
+* "My laptop is not working" → **Technology**
+* "I need help fixing a broken door" → **Repair**
+* "I need help with my assignment" → **Teaching**
+
+The customer can use the suggested category or select another category manually.
+
+---
+
+# 6. Notifications
+
+Users can receive notifications about important ticket activities.
+
+Users can:
+
+* View notifications
+* Open/read notifications
+* Mark notifications as read
+
+---
+
+# 7. Ticket Status Flow
+
+The system follows these status rules:
+
+```text
+Pending → In Progress → Completed
+
+Pending → Rejected
+
+Pending/In Progress → Cancelled
 ```
-backend/
-├── config/db.js              MongoDB connection
-├── controllers/               Route handler logic
-├── middleware/                 auth, role, error handling
-├── models/                     User, Ticket, Notification, Review
-├── routes/                     Express routers
-├── data/workers.json           Demo worker seed data
-├── utils/                      ticket number generator, category matcher, seed script
-├── index.js                    App entry point
-├── .env.example
-├── vercel.json
-└── package.json
-```
 
-## 4. Installation
+Completed, Rejected, and Cancelled tickets are final and cannot be changed.
 
-```bash
-cd backend
-npm install
-```
+---
 
-## 5. Environment Variables
+# 8. Typical Complete Workflow
 
-Copy `.env.example` to `.env`:
+### Customer
 
-```bash
-cp .env.example .env
-```
+**Register → Login → Raise an Issue → Select Category → Select Worker → Submit Request**
 
-```
-PORT=8000
-MONGO_URI=your_mongodb_atlas_connection_string_here
-JWT_SECRET=your_random_jwt_secret_here
-FRONTEND_URL=http://localhost:5173
-```
+### Worker
 
-### MongoDB Atlas setup
+**Login → View Request → Accept → Work on Request → Add Resolution Note → Complete**
 
-1. Create a free account at https://www.mongodb.com/cloud/atlas
-2. Create a new Cluster (the free M0 tier is enough).
-3. Under **Database Access**, create a database user with a username and password.
-4. Under **Network Access**, add your IP address (or `0.0.0.0/0` for testing/Vercel).
-5. Click **Connect > Drivers**, copy the connection string, and replace `<password>` with your database user's password.
-6. Paste the full string into `MONGO_URI` in your `.env` file.
+### Customer
 
-### JWT secret
+**Track Request → Chat with Worker → View Completed Request → Leave Review**
 
-`JWT_SECRET` can be any long random string. You can generate one quickly:
+### Admin
 
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-```
-
-Paste the output into `JWT_SECRET`.
-
-## 6. Running the Backend
-
-```bash
-npm run dev
-```
-
-This starts the server on `http://localhost:8000` (or whatever `PORT` you set) using nodemon, so it restarts automatically on file changes.
-
-## 7. Seeding the Database
-
-Run this once after setting up MongoDB:
-
-```bash
-npm run seed
-```
-
-This creates:
-- 1 admin account
-- 8 demo worker accounts across the categories Teaching, Technology, Design, Repair and Cleaning
-
-The seed script is safe to run multiple times — it skips accounts that already exist.
-
-## 8. Demo Accounts
-
-All demo accounts use the password shown below.
-
-| Role   | Email                     | Password  |
-|--------|----------------------------|-----------|
-| Admin  | admin@supportflow.com      | admin123  |
-| Worker | manahil@supportflow.com     | worker123 |
-| Worker | hooria@supportflow.com     | worker123 |
-| Worker | tayyaba@supportflow.com    | worker123 |
-| Worker | bilal@supportflow.com      | worker123 |
-| Worker | sara@supportflow.com       | worker123 |
-| Worker | usman@supportflow.com      | worker123 |
-| Worker | ayesha@supportflow.com     | worker123 |
-| Worker | zainab@supportflow.com     | worker123 |
-
-Customers register themselves from the frontend at `/register`.
-
-## 9. How the Mock Category Suggestion Works
-
-`utils/categorySuggestion.js` exports `suggestCategory(description)`. It lowercases the customer's description and checks it against predefined keyword lists for each category (Teaching, Technology, Design, Repair, Cleaning). Whichever category has the most keyword matches is suggested. If nothing matches, it returns `null` and the frontend shows "No suitable category found. Please select or enter a category manually."
-
-This is a plain JavaScript function — **no AI API, no API key, no external service is used.**
-
-## 10. Ticket Number Generation
-
-Every ticket gets both a MongoDB `_id` and a human-friendly `ticketNumber` like `SF-10001`, `SF-10002`, etc., generated in `utils/generateTicketNumber.js`.
-
-## 11. Status Flow Rules (enforced in the backend)
-
-```
-Pending → In Progress → Completed   (final)
-Pending → Rejected                  (final)
-Pending/In Progress → Cancelled     (customer only, final)
-```
-
-`Completed` requires a non-empty `resolutionNote`. Once a ticket is `Completed`, `Rejected`, or `Cancelled`, no further status changes are allowed — this is enforced in `controllers/workerController.js`, not just in the UI.
-
-## 12. API Routes
-
-All protected routes require an `Authorization: Bearer <token>` header.
-
-**Auth**
-```
-POST /api/auth/register
-POST /api/auth/login
-GET  /api/auth/me
-```
-
-**Users**
-```
-GET  /api/users/profile
-PUT  /api/users/profile
-```
-
-**Tickets (customer)**
-```
-POST /api/tickets
-GET  /api/tickets/my
-GET  /api/tickets/:id
-POST /api/tickets/:id/messages
-POST /api/tickets/:id/cancel
-```
-
-**Worker**
-```
-GET  /api/worker/tickets
-GET  /api/worker/tickets/:id
-PUT  /api/worker/tickets/:id/accept
-PUT  /api/worker/tickets/:id/reject
-PUT  /api/worker/tickets/:id/status
-PUT  /api/worker/tickets/:id/priority
-POST /api/worker/tickets/:id/messages
-```
-
-**Workers (public listing)**
-```
-GET  /api/workers
-GET  /api/workers/category/:category
-GET  /api/workers/:id/reviews
-```
-
-**Notifications**
-```
-GET /api/notifications
-PUT /api/notifications/:id/read
-```
-
-**Reviews**
-```
-POST /api/reviews
-```
-
-**Admin**
-```
-GET /api/admin/dashboard
-GET /api/admin/customers
-GET /api/admin/workers
-GET /api/admin/workers/:id
-GET /api/admin/tickets
-```
-
-No Postman is required — the React frontend is fully wired up to every one of these routes.
-
-## 13. Deploying to Vercel
-
-1. Push the `backend` folder to its own GitHub repository (e.g. `supportflow-backend`).
-2. On https://vercel.com, import that repository as a new project.
-3. In the project's **Environment Variables**, add:
-   - `MONGO_URI`
-   - `JWT_SECRET`
-   - `FRONTEND_URL` (set this to your deployed frontend URL once you have it, e.g. `https://supportflow-frontend.vercel.app`)
-4. Deploy. Vercel will use the included `vercel.json` to route all requests to `index.js`.
-5. Copy the deployed backend URL (e.g. `https://supportflow-backend.vercel.app`) — you'll need it for the frontend's `VITE_API_URL`.
-6. After the frontend is deployed, come back and update `FRONTEND_URL` in the backend's Vercel environment variables to match the real frontend URL, then redeploy so CORS works correctly.
-
-## 14. Common Errors and Solutions
-
-| Problem | Solution |
-|---|---|
-| `MongoDB connection error` | Double-check `MONGO_URI`, make sure your IP is allowed in Atlas Network Access. |
-| `401 Not authorized, no token` | Make sure the frontend is sending the `Authorization: Bearer <token>` header (this is handled automatically by `services/api.js` in the frontend). |
-| CORS errors in the browser | Make sure `FRONTEND_URL` in the backend `.env` matches the exact URL the frontend is running on. |
-| `Duplicate field value entered` on register | The email is already in use — try logging in instead. |
-| Seed script says accounts already exist | That's expected if you've already run `npm run seed` once; it won't create duplicates. |
+**Login → Dashboard → View Customers → View Workers → View Tickets → Check Worker Task History**

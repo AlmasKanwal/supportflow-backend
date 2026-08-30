@@ -34,6 +34,21 @@ app.use(
 );
 app.use(express.json());
 
+// On Vercel, app.listen() below is never what starts accepting traffic -
+// Vercel invokes the exported `app` directly per-request, without waiting
+// for connectDB().then() to resolve. On a cold start, a request can reach
+// a route handler before Mongoose has finished connecting, and since
+// bufferCommands is false, that query fails immediately instead of
+// queuing. This middleware makes every request wait for the *same*
+// in-flight connectDB() promise (only created once) before continuing,
+// so it's safe on both cold starts and warm invocations, and has no
+// effect locally since the connection is already established by the
+// time app.listen() lets requests in.
+const dbReady = connectDB();
+app.use((req, res, next) => {
+  dbReady.then(() => next()).catch(next);
+});
+
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "SupportFlow API is running" });
 });
@@ -52,14 +67,9 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 8000;
 
-// Only start accepting HTTP traffic once MongoDB is actually connected.
-// This is what prevents "Cannot call users.findOne() before initial
-// connection is complete" - previously the server started listening
-// immediately while connectDB() was still resolving DNS/SRV + TLS in
-// the background, so an early request could arrive before Mongoose was
-// ready. connectDB() itself calls process.exit(1) on failure, so if we
-// reach the .then() below, the connection is confirmed good.
-connectDB().then(async () => {
+// Reuses the same dbReady connection started above (line ~36) - calling
+// connectDB() a second time here would open a duplicate connection.
+dbReady.then(async () => {
   // Ensures admin + demo workers (Rohama, Hiraya, Tayyaba, etc.) always
   // exist, even on a brand-new/empty database - so category -> worker
   // suggestions never come back empty.

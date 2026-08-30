@@ -107,8 +107,8 @@ All demo accounts use the password shown below.
 | Role   | Email                     | Password  |
 |--------|----------------------------|-----------|
 | Admin  | admin@supportflow.com      | admin123  |
-| Worker | rohama@supportflow.com     | worker123 |
-| Worker | hiraya@supportflow.com     | worker123 |
+| Worker | manahil@supportflow.com     | worker123 |
+| Worker | hooria@supportflow.com     | worker123 |
 | Worker | tayyaba@supportflow.com    | worker123 |
 | Worker | bilal@supportflow.com      | worker123 |
 | Worker | sara@supportflow.com       | worker123 |
